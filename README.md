@@ -125,7 +125,7 @@ Buka http://localhost:3000 sekali saat masih online dan tunggu hingga service wo
 
 1. Unggah sumber proyek ke GitHub, GitLab, atau Bitbucket.
 2. Di Vercel, pilih **Add New → Project**, lalu impor repositorinya.
-3. Pilih preset **Next.js** dengan direktori akar proyek ini. Konfigurasi menyediakan perintah `npm run build` dan output `out`.
+3. Pilih preset **Other** dengan direktori akar proyek ini. Vercel memakai konfigurasi `vercel.json` untuk menjalankan `npm run build` dan menyajikan hasil ekspor statis dari `out`.
 4. Tekan **Deploy**. Buka URL HTTPS hasil deploy sekali untuk mulai menyimpan permainan offline.
 
 Dokumentasi [deploy dari Git](https://vercel.com/docs/git) dan [konfigurasi build](https://vercel.com/docs/builds/configure-a-build).
