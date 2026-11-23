@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KelasCeria
 
-## Getting Started
+KelasCeria menyediakan 25 permainan belajar berbahasa Indonesia untuk anak usia 4–6 tahun. Progres permainan dan pengaturan suara tersimpan di perangkat. Menu, permainan, dan pengaturan dibangun sebagai rute Next.js App Router yang dapat dihosting sebagai berkas statis.
 
-First, run the development server:
+## Menjalankan proyek
 
-```bash
+Gunakan Node.js 20.9 atau lebih baru.
+
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka http://localhost:3000. Pada PowerShell yang memblokir `npm.ps1`, jalankan `npm.cmd` untuk setiap perintah npm.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Jika memulai dari direktori kosong, perintah scaffold adalah `npx create-next-app@latest kelasceria --ts --tailwind --eslint --app --src-dir --use-npm`. Proyek di repositori ini sudah lengkap sehingga langkah scaffold dapat dilewati.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Struktur proyek
 
-## Learn More
+```text
+kelasceria/
+├── AGENTS.md
+├── README.md
+├── eslint.config.mjs
+├── next.config.ts
+├── package.json
+├── package-lock.json
+├── tailwind.config.ts
+├── tsconfig.json
+├── vercel.json
+├── public/
+│   ├── manifest.webmanifest
+│   ├── sw.js                       worker pembersih khusus development
+│   ├── icon.svg
+│   ├── icon-192.png
+│   ├── icon-512.png
+│   └── audio/                      opsional
+├── scripts/
+│   ├── buat-offline.mjs
+│   └── preview.mjs
+└── src/
+    ├── app/
+    │   ├── page.tsx
+    │   ├── layout.tsx
+    │   ├── globals.css
+    │   ├── [nama-permainan]/page.tsx
+    │   ├── pengaturan/page.tsx
+    │   └── fonts/
+    │       ├── baloo-2.ttf
+    │       ├── nunito.ttf
+    │       ├── OFL-baloo-2.txt
+    │       └── OFL-nunito.txt
+    ├── components/
+    │   ├── Bilah.tsx
+    │   ├── GerbangOrangTua.tsx
+    │   ├── Ikon.tsx
+    │   ├── Ilustrasi.tsx
+    │   ├── ilustrasi/
+    │   │   ├── alam.tsx
+    │   │   ├── angkasa.tsx
+    │   │   ├── benda.tsx
+    │   │   ├── bentuk.tsx
+    │   │   ├── pelajaran.tsx
+    │   │   ├── sekitar.tsx
+    │   │   └── tambahan.tsx
+    │   ├── KartuMenu.tsx
+    │   ├── Konfeti.tsx
+    │   ├── LayarBintang.tsx
+    │   ├── Maskot.tsx
+    │   ├── Memory.tsx
+    │   ├── Permainan.tsx
+    │   ├── PilihanJawaban.tsx
+    │   ├── PuzzleGambar.tsx
+    │   ├── Seni.tsx
+    │   ├── TombolBesar.tsx
+    │   ├── TombolMusik.tsx
+    │   ├── TombolSuara.tsx
+    │   └── Tubuh.tsx
+    ├── data/
+    │   ├── angka.ts
+    │   ├── contoh-gambar.ts
+    │   ├── buah.ts
+    │   ├── hewan.ts
+    │   ├── huruf.ts
+    │   ├── kuis-tema.ts
+    │   ├── materi.ts
+    │   ├── menu.ts
+    │   ├── mewarnai.ts
+    │   └── petunjuk.ts
+    ├── hooks/
+    │   ├── useBgm.ts
+    │   ├── useProgress.tsx
+    │   ├── useRonde.ts
+    │   └── useSuara.ts
+    └── lib/
+        ├── audio.ts
+        └── soal.ts
+```
 
-To learn more about Next.js, take a look at the following resources:
+Setiap ronde kuis terdiri dari lima soal. Ronde yang selesai memberi 1, 2, atau 3 bintang sesuai level dan membuka level berikutnya. Anak boleh mencoba sampai benar. Dalam Mencocokkan Gambar, satu ronde adalah satu papan berisi 20 kartu dan berakhir setelah 10 pasang ditemukan. Menggambar menyediakan contoh bergambar dan panduan singkat di samping kanvas bebas. Puzzle Gambar memakai 4, 9, atau 16 potongan sesuai tingkat. Setiap gambar Mewarnai memiliki bidang yang bisa diwarnai satu per satu.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Menambah materi
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Untuk buah, tambahkan pasangan nama dan ID ilustrasi di `src/data/buah.ts`, misalnya `["Pepaya", "pepaya"]`. Tambahkan bidang SVG bernama `pepaya` di `src/components/ilustrasi/alam.tsx`. Materi ini muncul di Buah-buahan, Tebak Gambar, dan kartu pasangan.
+- Untuk hewan, gunakan format nama, ID ilustrasi, dan tiruan bunyi opsional seperti `["Burung", "burung", "cuit cuit"]`. Bunyi dibacakan oleh suara perangkat.
+- Huruf memakai format huruf, kata, dan ID ilustrasi. Kategori umum lainnya ada di `src/data/materi.ts`. Sediakan sedikitnya lima entri berbeda supaya setiap ronde dapat berisi lima soal.
+- Untuk menambahkan kategori kuis, daftarkan slug dan metadata di `src/data/menu.ts`, lalu tambahkan bank dengan slug yang sama di `src/data/materi.ts`. Rute dan kuis generik ikut dibuat saat build.
+- Tambahkan gambar untuk mewarnai di `src/data/mewarnai.ts`. Setiap bidang memiliki nama dan jalur SVG di dalam area gambar 400 × 260.
 
-## Deploy on Vercel
+## Mengganti musik latar
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Buat folder `public/audio/` dan tambahkan `bgm-menu.mp3` atau `bgm-main.mp3`. Siapkan audio yang berulang mulus dan gunakan musik yang Anda miliki hak pakainya. Musik sintetis dipakai ketika file pengganti untuk suasana itu tidak tersedia atau gagal diputar. Setelah mengganti audio, jalankan build ulang agar file ikut tersedia offline.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Build dan uji offline
+
+```sh
+npm run lint
+npm run build
+npm start
+```
+
+Buka http://localhost:3000 sekali saat masih online dan tunggu hingga service worker aktif. Setelah itu, gunakan opsi instal aplikasi pada browser yang mendukungnya. Di Safari pada iPad atau iPhone, gunakan Bagikan → Tambahkan ke Layar Utama. Ketersediaan suara bahasa Indonesia dan pembacaan saat offline mengikuti suara yang ada di perangkat. Musik sintetis, efek suara, dan aktivitas tetap tersedia melalui build yang sudah disimpan browser.
+
+## Deploy ke Vercel
+
+1. Unggah sumber proyek ke GitHub, GitLab, atau Bitbucket.
+2. Di Vercel, pilih **Add New → Project**, lalu impor repositorinya.
+3. Pilih preset **Next.js** dengan direktori akar proyek ini. Konfigurasi menyediakan perintah `npm run build` dan output `out`.
+4. Tekan **Deploy**. Buka URL HTTPS hasil deploy sekali untuk mulai menyimpan permainan offline.
+
+Dokumentasi [deploy dari Git](https://vercel.com/docs/git) dan [konfigurasi build](https://vercel.com/docs/builds/configure-a-build).
